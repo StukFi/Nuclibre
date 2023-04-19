@@ -81,7 +81,7 @@ unzip  All-nuclides_Ensdf.zip -d DDEP
 
 Now run the nuclibre application to produce a database called *nuclib.sqlite* from the ENSDF data file patched by the DDEP data
 ```
-java -jar dist/nuclibre.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlite
+java -jar nuclibre.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlite
 ```
 
 ## References
