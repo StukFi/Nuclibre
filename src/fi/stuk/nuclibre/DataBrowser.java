@@ -119,8 +119,8 @@ public class DataBrowser {
         System.out.println("Decays:");
         printResults(rs,"\t",1);
         
-        //sql = "SELECT energy, emissionProb, daughterNuclideId, lineType, designation, source FROM libLines WHERE nuclideId = '"+id+"' AND (lineType = 'G' OR lineType = 'X' OR lineType = 'A') ORDER BY emissionProb DESC;";
-        sql = "SELECT energy, emissionProb, daughterNuclideId, lineType FROM libLines WHERE nuclideId = '"+id+"' AND (lineType = 'G' OR lineType = 'X' OR lineType = 'A') ORDER BY emissionProb DESC;";
+        sql = "SELECT energy, emissionProb, daughterNuclideId, lineType, designation, source FROM libLines WHERE nuclideId = '"+id+"' AND (lineType = 'G' OR lineType = 'X' OR lineType = 'A') ORDER BY emissionProb DESC;";
+        //sql = "SELECT energy, emissionProb, daughterNuclideId, lineType FROM libLines WHERE nuclideId = '"+id+"' AND (lineType = 'G' OR lineType = 'X' OR lineType = 'A') ORDER BY emissionProb DESC;";
         s = c.createStatement();
         rs = s.executeQuery(sql);
         System.out.println("Emissions:");
