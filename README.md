@@ -3,10 +3,16 @@
 Nuclibre project contains the code for generating an sqlite nuclide database. Nuclibre is based on the *NUCLIB* database by
 H. Toivonen and A. Pelican [1].
 
+The nuclibre code is used to generate the database from ENSDF (evaluated nuclear structure data file) format data. It is recommended to use the data files available from the Brookhaven National Laboratory to provide the base data, and to patch it using the data available from the decay data evaluation project at Laboratoire National Henri Becquerel.
+
 ## Quick start
 -----
+Make sure you have JDK 7  or later installed
+```
+java --version
+```
 
-Get the source code by cloning the repository
+Get the nuclibre source code by cloning the repository
 ```
 git clone https://gitlab.valtori.fi/stuk-private/nuklididata/nuclibre.git
 ```
