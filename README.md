@@ -66,7 +66,7 @@ and unzip the package to directory ENSDF. Concatenate the files to form one big 
 ```
 mkdir ENSDF
 unzip ensdf_230403.zip -d ENSDF
-cat ENSDF/ens.*  > ensdf-all-230403.txt
+cat ENSDF/ensdf.*  > ensdf-all-230403.txt
 ```
 
 Download the DDEP nuclear data in ENSDF format
