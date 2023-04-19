@@ -699,24 +699,26 @@ public class ENSDFNuclibreEncoder {
                 double br = decay.getDaughterMSBraching();
                 if(br > 1)br = 1;
                 String branching = br+"";                
-                try{
-                    //For B-, require that the decaying level is known.
-                    if(!(type.equals("B-") && decayingLevel == null && !isDecayFromIsomer)){
-                        insert(c, "decays", 
-                                "parentNuclideId", parentNUCID, "daughterNuclideId", daughterId+daughterMS, "decayType", type, "qValue", qValue, "uncQValue", uncQValue, 
-                                "branching", branching, "uncBranching", uncBranching, "source", decay.getOrigin());
+                if(br > 0){
+                    try{
+                        //For B-, require that the decaying level is known.
+                        if(!(type.equals("B-") && decayingLevel == null && !isDecayFromIsomer)){
+                            insert(c, "decays", 
+                                    "parentNuclideId", parentNUCID, "daughterNuclideId", daughterId+daughterMS, "decayType", type, "qValue", qValue, "uncQValue", uncQValue, 
+                                    "branching", branching, "uncBranching", uncBranching, "source", decay.getOrigin());
+                        }
                     }
-                }
-                catch(Exception exe){
-                    if(Main.printExceptions){
-                        String str = ("Exception during SQL:\n"+lastSQL);
-                        str += ("\nDecay originated on line: "+decay.getLineNro());                    
-                        Logger.getLogger(ENSDFNuclibreEncoder.class.getName()).log(Level.WARNING, "Failed to store decay "+dsid+"\n"+str, exe);
-                    }               
+                    catch(Exception exe){
+                        if(Main.printExceptions){
+                            String str = ("Exception during SQL:\n"+lastSQL);
+                            str += ("\nDecay originated on line: "+decay.getLineNro());                    
+                            Logger.getLogger(ENSDFNuclibreEncoder.class.getName()).log(Level.WARNING, "Failed to store decay "+dsid+"\n"+str, exe);
+                        }               
+                    }
                 }
             }            
             try{             
-                double br = nr.getBR()-decay.getDaughterMSBraching();
+                double br = nr.getBR()-decay.getDaughterMSBraching();                
                 if(br > 0){
                     String branching = br+"";                
                     //For B-, require that the decaying level is known.
