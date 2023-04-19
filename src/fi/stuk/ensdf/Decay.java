@@ -1,8 +1,12 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
+*(c) 2023 STUK - Finnish Radiation and Nuclear Safety Authority. 
+*
+* This source code is licensed under a
+* Creative Commons Attribution 4.0 International License.
+*
+* You should have received a copy of the license along with this
+* work.  If not, see <http://creativecommons.org/licenses/by/4.0/>. 
+*/
 package fi.stuk.ensdf;
 
 import fi.stuk.ensdf.record.IdentificationRecord;

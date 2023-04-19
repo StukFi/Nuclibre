@@ -1,8 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+*(c) 2023 STUK - Finnish Radiation and Nuclear Safety Authority. 
+*
+* This source code is licensed under a
+* Creative Commons Attribution 4.0 International License.
+*
+* You should have received a copy of the license along with this
+* work.  If not, see <http://creativecommons.org/licenses/by/4.0/>. 
+*/
 package fi.stuk.nuclibre;
 
 import java.sql.Statement;
