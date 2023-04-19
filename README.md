@@ -69,3 +69,7 @@ java -jar dist/nuclibre.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlit
 ## References
 -----
 [1] Toivonen H., Pelican A., TTL-TECDOC-2008-010 NUCLIB - Nuclide Library for LINSSI Applications.
+
+## License
+-----
+Use of this work is governed by an MIT-style license that is found in the LICENSE file.
