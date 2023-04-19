@@ -9,7 +9,7 @@ The nuclibre code is used to generate the database from ENSDF (evaluated nuclear
 -----
 Make sure you have JDK 7  or later installed
 ```
-java --version
+javac --version
 ```
 
 Get the nuclibre source code by cloning the repository
