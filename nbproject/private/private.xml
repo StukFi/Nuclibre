@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/record/NormalizationRecord.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/record/Record.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/PeriodicTable.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/record/ECRecord.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/Dataset.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/type/Uncertainty.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/nuclibre/Nuclibre.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/nuclibre/DataBrowser.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/AdoptedDataset.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/DecayDataset.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/nuclibre/ENSDFNuclibreEncoder.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/NuclideDataset.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/CommentsDataset.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/nuclibre/NuclibreSQL.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/ENSDFParser.java</file>
+            <file>file:/C:/developement/java/nuclibre/src/fi/stuk/ensdf/Decay.java</file>
+        </group>
+    </open-files>
+</project-private>
