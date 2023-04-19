@@ -1,11 +1,8 @@
 /*
-*(c) 2023 STUK - Finnish Radiation and Nuclear Safety Authority. 
+* Copyright (c) 2023 Radiation and Nuclear Safety Authority (STUK)
 *
-* This source code is licensed under a
-* Creative Commons Attribution 4.0 International License.
-*
-* You should have received a copy of the license along with this
-* work.  If not, see <http://creativecommons.org/licenses/by/4.0/>. 
+*Use of this source code is governed by an MIT-style
+*license that can be found in the LICENSE file.
 */
 package fi.stuk.ensdf;
 
