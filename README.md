@@ -40,6 +40,25 @@ build the nuclibre project with netbeans, or with ant
 ant clean build
 ```
 
+or with `javac` directly
+```
+mkdir build
+javac -d build -cp ".:libraries/commons-cli-1.3.1.jar:libraries/sqlite-jdbc-3.8.6.jar" --source-path src src/fi/stuk/ensdf/*.java src/fi/stuk/ensdf/type/*.java src/fi/stuk/ensdf/record/*.java src/fi/stuk/nuclibre/*.java
+cd build
+jar -cvfm ../nuclibre.jar ../nuclibre-manifest.mf *
+cd ..
+```
+
+Note that On windows, you have to give the following commands for javac compilation
+```
+mkdir build
+javac -d build -cp ".;libraries\commons-cli-1.3.1.jar;libraries\sqlite-jdbc-3.8.6.jar" --source-path src src\fi\stuk\ensdf\*.java src\fi\stuk\ensdf\type\*.java src\fi\stuk\ensdf\record\*.java src\fi\stuk\nuclibre\*.java
+cd build
+jar -cvfm ..\nuclibre.jar ..\nuclibre-manifest.mf *
+cd ..
+```
+
+
 Download the ENSDF nuclear data
 
 (https://www.nndc.bnl.gov/ensdfarchivals/distributions/dist23/ensdf_230403.zip)
