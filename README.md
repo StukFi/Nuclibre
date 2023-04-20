@@ -43,7 +43,7 @@ ant clean build
 or with `javac` directly
 ```
 mkdir build
-javac -d build -cp ".:libraries/commons-cli-1.3.1.jar:libraries/sqlite-jdbc-3.8.6.jar" --source-path src src/fi/stuk/ensdf/*.java src/fi/stuk/ensdf/type/*.java src/fi/stuk/ensdf/record/*.java src/fi/stuk/nuclibre/*.java
+javac -d build -cp ".:libraries/commons-cli-1.3.1.jar:libraries/sqlite-jdbc-3.8.6.jar:src" src/fi/stuk/ensdf/*.java src/fi/stuk/ensdf/type/*.java src/fi/stuk/ensdf/record/*.java src/fi/stuk/nuclibre/*.java
 cd build
 jar -cvfm ../nuclibre.jar ../nuclibre-manifest.mf *
 cd ..
@@ -52,7 +52,7 @@ cd ..
 Note that on windows, you have to give the following commands for javac compilation
 ```
 mkdir build
-javac -d build -cp ".;libraries\commons-cli-1.3.1.jar;libraries\sqlite-jdbc-3.8.6.jar" --source-path src src\fi\stuk\ensdf\*.java src\fi\stuk\ensdf\type\*.java src\fi\stuk\ensdf\record\*.java src\fi\stuk\nuclibre\*.java
+javac -d build -cp ".;libraries\commons-cli-1.3.1.jar;libraries\sqlite-jdbc-3.8.6.jar;src" src\fi\stuk\ensdf\*.java src\fi\stuk\ensdf\type\*.java src\fi\stuk\ensdf\record\*.java src\fi\stuk\nuclibre\*.java
 cd build
 jar -cvfm ..\nuclibre.jar ..\nuclibre-manifest.mf *
 cd ..
