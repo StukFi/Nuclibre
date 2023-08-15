@@ -15,7 +15,7 @@ import java.sql.ResultSet;
  * @author Tero Karhunen
  */
 public class DataBrowser {
-    /** The connection to the nuclibre datase. */
+    /** The connection to the nuclibre database. */
     Connection c = null;
     
     /**
