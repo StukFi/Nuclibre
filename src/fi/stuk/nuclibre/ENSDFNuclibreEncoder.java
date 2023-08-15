@@ -778,7 +778,7 @@ public class ENSDFNuclibreEncoder {
                  insert(c, "libLines",                            
                                 "nuclideId", parentId, "lineType", "X", "idLine", lineNum+"", "daughterNuclideId", daughterId,                            
                                 "energy", r.energy+"", "emissionProb", 
-                                ""+EncoderUtil.roundToSigDigits(r.lineInt*br,4,1), "designation", r.line);
+                                ""+EncoderUtil.roundToSigDigits((r.lineInt*br)/100d,4,1), "designation", r.line);
                  lineNum++;
             }
         }
@@ -958,7 +958,7 @@ public class ENSDFNuclibreEncoder {
                         cumIb += captures.get(i).getIB();
                 }
                 if(cumIb != 0){
-                    double intens = EncoderUtil.roundToSigDigits((2*cumIb),4,1);                    
+                    double intens = EncoderUtil.roundToSigDigits((2*cumIb)/100d,4,1);
                     if(!Double.isNaN(intens)){                       
                                 insert(c, "libLines",                            
                                 "nuclideId", parentNuclideId,"lineType", "G", "idLine", lineNum+"", "daughterNuclideId", daughterNuclideId,
@@ -1025,17 +1025,18 @@ public class ENSDFNuclibreEncoder {
             String uncEnergy = "NULL";                    
             if(en != null)energy = en+"";
             if(uEn != null && en != null)uncEnergy = uEn.getValue()+"";
-            Double emProb = er.getRI();                    
-            String emissionProb = er.getRI()+"";
+            Double emProb = er.getRI();                                
+            String emissionProb = "NULL";
+            if(emProb != null)emissionProb = (er.getRI()/100d)+"";
             String uncEmissionProb = "NULL";                    
             if(er.getDRI() != null && er.getRI() != null)uncEmissionProb = er.getDRI().getValue()+"";
             if(isDecayFromIsomer){
                 if(er.getRI() != null)
-                    if(!isDecayFromIsomer)emissionProb = (er.getRI()*br)+"";
-                    else emissionProb = (er.getRI())+"";
+                    if(!isDecayFromIsomer)emissionProb = (er.getRI()*br/100d)+"";
+                    else emissionProb = (er.getRI()/100d)+"";
             }
             if(er instanceof AlphaRecord && er != null && er.getRI() != null){
-                emissionProb = (er.getRI()*br)+"";
+                emissionProb = (er.getRI()*br/100d)+"";
             }
             LevelRecord fromLevel = null;
             LevelRecord toLevel = null;            
