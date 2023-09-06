@@ -37,7 +37,9 @@ cp sqlite-jdbc-3.8.6.jar ./libraries
 
 build the nuclibre project with netbeans, or with ant
 ```
+cp nuclibre-manifest.mf manifest.mf
 ant clean jar
+cp dist/nuclibre.jar .
 ```
 
 or with `javac` directly
