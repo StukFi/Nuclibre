@@ -64,7 +64,7 @@ public class NuclibreSQL {
             + "idState integer, "
             + "energy float, "
             + "uncEnergy float, "
-            + "spinParity float, "
+            + "spinParity varchar(18), "
             + "halflife float, "
             + "uncHalflife float, "
             + "isomer varchar(1), "
