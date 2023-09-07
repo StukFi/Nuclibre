@@ -86,6 +86,14 @@ Now run the nuclibre application to produce a database called *nuclib.sqlite* fr
 java -jar nuclibre.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlite
 ```
 
+## Support for other SQL databases
+
+Postgres support is tested. SQLite database can be exported to Postgres using pgloader tool:
+```
+createdb nuclibre
+pgloader ./nuclibre.sqlite postgresql://user:pass@host/nuclibre
+```
+
 ## References
 -----
 [1] Toivonen H., Pelican A., TTL-TECDOC-2008-010 NUCLIB - Nuclide Library for LINSSI Applications.
