@@ -91,11 +91,20 @@ java -jar nuclibre.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlite
 
 ## Support for other SQL databases
 
-Postgres support is tested. SQLite database can be exported to Postgres using pgloader tool:
+Postgres and MySQL/MariaDB support has been tested. 
+
+SQLite database can be exported to Postgres using pgloader tool:
 ```
 createdb nuclibre
 pgloader ./nuclibre.sqlite postgresql://user:pass@host/nuclibre
 ```
+
+To export the SQLite database to MySQL/MariaDB, use the command:
+```
+sqlite3 nuclib.sqlite .dump | tr -d '"' | sed 1,2d | sed '$ d' | mysql -u <uname> -p <db>
+```
+Note that the database schema must already exist in MySQL/MariaDB.
+
 
 ## References
 -----
