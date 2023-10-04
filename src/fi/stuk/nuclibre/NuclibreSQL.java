@@ -67,7 +67,7 @@ public class NuclibreSQL {
             + "spinParity varchar(18), "
             + "halflife float, "
             + "uncHalflife float, "
-            + "isomer varchar(1), "
+            + "isomer varchar(3), "
             + "source varchar(9), "
             + "PRIMARY KEY(nuclideId, idState)"
             + ");";
@@ -78,7 +78,7 @@ public class NuclibreSQL {
     public static final String CREATE_LIBLINES_STRING = "create table libLines "
             + "("
             + "nuclideId varchar(9), "
-            + "lineType char(1),"
+            + "lineType varchar(1),"
             + "idLine integer,"
             + "daughterNuclideId varchar(9),"
             + "initialIdStateP integer,"
@@ -88,7 +88,7 @@ public class NuclibreSQL {
             + "uncEnergy float,"
             + "emissionProb float,"
             + "uncEmissionProb float,"
-            + "designation varchar,"
+            + "designation varchar(9),"
             + "source varchar(9), "
             + "PRIMARY KEY(nuclideId, daughterNuclideId, lineType, idLine)"
             + ");";
