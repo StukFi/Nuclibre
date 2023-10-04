@@ -26,7 +26,6 @@ import fi.stuk.ensdf.record.Record;
 import fi.stuk.ensdf.type.HalfLifeValue;
 import fi.stuk.ensdf.type.Uncertainty;
 import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -59,11 +58,14 @@ public class ENSDFNuclibreEncoder {
     
     /** Element electron shell data. */
     ShellData[] shellData;
-    
-    /** Last SQL statement preformed. */
-    public static String lastSQL = null;
-    
-     /**
+
+    public final OutputDialect outputDialect;
+
+    public ENSDFNuclibreEncoder(OutputDialect outputDialect) {
+        this.outputDialect = outputDialect;
+    }
+
+    /**
      * Insert data to given table using a given connection.
      * @param c the connection to use.
      * @param table the table to insert data to.
@@ -71,35 +73,9 @@ public class ENSDFNuclibreEncoder {
      * @throws Exception 
      */
     private void insert(Connection c, String table, String... values) throws Exception{
-        if(Main.testRun)return;
-        String columnStr = "";
-        String valueStr = "";
-        List<String> add = new ArrayList<>();        
-        for(int i = 0;i < values.length;i+=2){
-            String col = values[i];
-            String val = values[i+1];
-            if(col != null && val != null && !val.equals("NULL") && !val.equals("null")){
-                add.add(col);
-                add.add(val);
-            }
-        }
-        for(int i = 0;i < add.size();i+=2){
-            String col = add.get(i);
-            String val = add.get(i+1);
-            columnStr += col;
-            valueStr += "'"+val+"'";
-            if(i != add.size()-2){
-                columnStr += ",";
-                valueStr += ",";
-            }
-        }
-        String sql = "INSERT INTO "+table+" ("+columnStr+") VALUES ("+valueStr+");";        
-        lastSQL = sql;
-        Statement s = c.createStatement();
-        s.execute(sql);
-        s.close();
+        outputDialect.insert(c, table, values);
     }
-  
+
     /**
      * Store nuclide information from an ENSDF nuclide dataset into nuclib.
      * @param d the dataset.
@@ -170,7 +146,7 @@ public class ENSDFNuclibreEncoder {
        }
        catch(Exception exe){
            if(Main.printExceptions){
-                String str = ("Exception during SQL:\n"+lastSQL);
+                String str = ("Exception during SQL:\n"+ outputDialect.getLastSQL());
                 str += ("\nNuclide data originated on line: "+d.getLineNro());
                 Logger.getLogger(ENSDFNuclibreEncoder.class.getName()).log(Level.WARNING, "Failed to store nuclide "+nuclideId+"\n"+str, exe);
                 return(false);
@@ -710,7 +686,7 @@ public class ENSDFNuclibreEncoder {
                     }
                     catch(Exception exe){
                         if(Main.printExceptions){
-                            String str = ("Exception during SQL:\n"+lastSQL);
+                            String str = ("Exception during SQL:\n"+ outputDialect.getLastSQL());
                             str += ("\nDecay originated on line: "+decay.getLineNro());                    
                             Logger.getLogger(ENSDFNuclibreEncoder.class.getName()).log(Level.WARNING, "Failed to store decay "+dsid+"\n"+str, exe);
                         }               
@@ -731,7 +707,7 @@ public class ENSDFNuclibreEncoder {
             }
             catch(Exception exe){
                 if(Main.printExceptions){
-                    String str = ("Exception during SQL:\n"+lastSQL);
+                    String str = ("Exception during SQL:\n"+ outputDialect.getLastSQL());
                     str += ("\nDecay originated on line: "+decay.getLineNro());                    
                     Logger.getLogger(ENSDFNuclibreEncoder.class.getName()).log(Level.WARNING, "Failed to store decay "+dsid+"\n"+str, exe);
                 }               
@@ -1066,7 +1042,7 @@ public class ENSDFNuclibreEncoder {
                 }
                 catch(Exception ex){
                     if(Main.printExceptions){
-                        String str = ("Exception during SQL for liblines:\n"+lastSQL);
+                        String str = ("Exception during SQL for liblines:\n"+ outputDialect.getLastSQL());
                         Logger.getLogger(ENSDFNuclibreEncoder.class.getName()).log(Level.WARNING, "Failed to store libLine:\n"+str, ex);
                     }
                 }

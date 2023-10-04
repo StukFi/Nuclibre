@@ -56,7 +56,9 @@ public class Main {
     
     /** Patch data source. */
     private static String patchSource = null;
-    
+
+    private static OutputDialect outputDialect = new SQLiteOutputDialect();
+
     /**
      * Print usage information and exit with given code.
      * @param exitCode the code to exit with.
@@ -77,7 +79,8 @@ public class Main {
         options.addOption("b", "browse", true, "Browse the data for <arg> in the sqlite file.");
         options.addOption("P","patch-dir", true, "Patch the parsed input with files from a specified directory. ");
         options.addOption("S","patch-source", true, "Specify the source for patch directory data.");
-        options.addOption("e","ensdf-file", true, "Specify the input ENSDF file");        
+        options.addOption("e","ensdf-file", true, "Specify the input ENSDF file");
+        options.addOption("d", "dialect", true, "Specify output SQL dialect (default: sqlite)");
     }
     
      /**
@@ -144,6 +147,16 @@ public class Main {
             }            
             patches = value;
         }
+        if(cmd.hasOption("d")) {
+            String value = cmd.getOptionValue("d").toLowerCase();
+            if (value.equals("csv")) {
+                outputDialect = new CSVOutputDialect();
+                System.out.println("Output dialect is set to CSV.");
+            }
+            else {
+                System.err.println("Error: invalid output dialect " + value);
+            }
+        }
     }
         
     /**
@@ -185,8 +198,8 @@ public class Main {
         try {
             File sqliteFile = new File(leftover[0]);             
             Connection c = null;
-            if(!Main.browse && !Main.testRun)c = Nuclibre.createNuclibDatabase(sqliteFile);             
-            else c = Nuclibre.getDatabaseConnection(sqliteFile);
+            if (!Main.browse && !Main.testRun) c = outputDialect.createNuclibDatabase(sqliteFile);
+            else c = outputDialect.getDatabaseConnection(sqliteFile);
             if(ensdfFile != null){
                FileReader fr = new FileReader(ensdfFile);
                ENSDFParser p = new ENSDFParser();
@@ -194,21 +207,22 @@ public class Main {
                fr.close();                    
                if(patches != null)patchDir(p, patches);
                if(!Main.browse){
-                    ENSDFNuclibreEncoder encoder = new ENSDFNuclibreEncoder();
+                    ENSDFNuclibreEncoder encoder = new ENSDFNuclibreEncoder(outputDialect);
                     encoder.store(p, c);
-                    if(!testRun)c.commit();      
+                    if(!testRun && c != null)c.commit();
                }
             }               
             if(Main.browse){               
                DataBrowser b = new DataBrowser(c);
                b.browse(browseId);
-            }            
-            c.close();             
+            }
+            if (c != null)
+                c.close();
         }
         catch (SQLException ex1) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Error", ex1);
-            if(ENSDFNuclibreEncoder.lastSQL != null)
-                   System.err.println("Last SQL statment was:\n"+ENSDFNuclibreEncoder.lastSQL);
+            if(outputDialect.getLastSQL() != null)
+                   System.err.println("Last SQL statment was:\n"+outputDialect.getLastSQL());
         } 
         catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Error", ex);
