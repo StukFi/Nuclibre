@@ -153,6 +153,10 @@ public class Main {
                 outputDialect = new CSVOutputDialect();
                 System.out.println("Output dialect is set to CSV.");
             }
+            else if (value.equals("postgres")) {
+                outputDialect = new PostgresOutputDialect();
+                System.out.println("Output dialect is set to Postgres.");
+            }
             else {
                 System.err.println("Error: invalid output dialect " + value);
             }
@@ -216,6 +220,7 @@ public class Main {
                DataBrowser b = new DataBrowser(c);
                b.browse(browseId);
             }
+            outputDialect.close();
             if (c != null)
                 c.close();
         }

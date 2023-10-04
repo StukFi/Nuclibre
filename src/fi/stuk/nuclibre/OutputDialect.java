@@ -37,6 +37,8 @@ public interface OutputDialect {
      */
     void insert(Connection c, String table, String... values) throws Exception;
 
+    default void close() throws Exception {}
+
     /**
      * Get the last executed SQL statement.
      *
