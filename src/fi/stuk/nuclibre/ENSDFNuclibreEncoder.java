@@ -141,7 +141,7 @@ public class ENSDFNuclibreEncoder {
           
        insert(c, "nuclides", 
                "nuclideId", nuclideId, "z", Z, "a", A, "halflife", halfLifeSeconds , "uncHalflife", uncHalfLifeSeconds,
-               "isStable", isStable, "qMinus", qMinus, "uncQMinus", uncQMinus, "sn", SN, "uncSn",uncSN, "sp", SP, "uncSP", uncSP, 
+               "isStable", isStable, "qMinus", qMinus, "uncQMinus", uncQMinus, "sn", SN, "uncSn",uncSN, "sp", SP, "uncSp", uncSP,
                "qAlpha", qAlpha, "uncQAlpha", uncQAlpha, "qPlus", qPlus, "uncQPlus", uncQPlus, "qEc",qEc, "uncQEc",uncQEc,  "source", source);
        }
        catch(Exception exe){
@@ -189,7 +189,7 @@ public class ENSDFNuclibreEncoder {
        
        insert(c, "nuclides", 
                "nuclideId", isomerId, "z",Z, "a",A, "isomer",MS, "halflife", halfLifeSeconds , 
-               "isStable", isStable, "category", null, "qMinus", qMinus, "uncQMinus", uncQMinus, "sn", SN, "uncSn",uncSN, "sp", SP, "uncSP", uncSP, 
+               "isStable", isStable, "category", null, "qMinus", qMinus, "uncQMinus", uncQMinus, "sn", SN, "uncSn",uncSN, "sp", SP, "uncSp", uncSP,
                "qAlpha", qAlpha, "uncQAlpha", uncQAlpha, "qPlus", qPlus, "uncQPlus", uncQPlus, "source", source);       
        putToIsomers(nuclideId, MS, msHalflife);
     }  

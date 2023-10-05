@@ -80,7 +80,7 @@ public class Main {
         options.addOption("P","patch-dir", true, "Patch the parsed input with files from a specified directory. ");
         options.addOption("S","patch-source", true, "Specify the source for patch directory data.");
         options.addOption("e","ensdf-file", true, "Specify the input ENSDF file");
-        options.addOption("d", "dialect", true, "Specify output SQL dialect (default: sqlite)");
+        options.addOption("d", "dialect", true, "Specify output SQL dialect sqlite, csv, postgres or postgres-compat. The default is sqlite.");
     }
     
      /**
@@ -153,8 +153,12 @@ public class Main {
                 outputDialect = new CSVOutputDialect();
                 System.out.println("Output dialect is set to CSV.");
             }
-            else if (value.equals("postgres")) {
+            else if (value.equals("postgres-compat")) {
                 outputDialect = new PostgresOutputDialect();
+                System.out.println("Output dialect is set to Postgres with backwards compatible schema.");
+            }
+            else if (value.equals("postgres")) {
+                outputDialect = new PostgresOutputDialect().setSchemaStyle(PostgresOutputDialect.SchemaStyle.POSTGRES_STYLE);
                 System.out.println("Output dialect is set to Postgres.");
             }
             else {

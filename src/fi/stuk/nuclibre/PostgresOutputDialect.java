@@ -18,7 +18,86 @@ public class PostgresOutputDialect implements OutputDialect {
     /**
      * SQL string to create 'decays' table.
      */
-    public static final String CREATE_TABLE_DECAY = "create table decay "
+    public static final String MY_STYLE_CREATE_TABLE_DECAYS = "create table \"decays\" "
+            + "("
+            + "\"parentNuclideId\" varchar, "
+            + "\"daughterNuclideId\" varchar, "
+            + "\"decayType\" varchar, "
+            + "\"qValue\" float, "
+            + "\"uncQValue\" float, "
+            + "\"branching\" float,"
+            + "\"uncBranching\" float, "
+            + "\"source\" varchar, "
+            + "PRIMARY KEY(\"parentNuclideId\", \"daughterNuclideId\", \"decayType\")"
+            + ");";
+
+    /**
+     * SQL string to create 'nuclides' table.
+     */
+    public static final String MY_STYLE_CREATE_TABLE_NUCLIDES = "create table \"nuclides\" "
+            + "("
+            + "\"nuclideId\" varchar, "
+            + "\"z\" integer, "
+            + "\"a\" integer, "
+            + "\"isomer\" varchar, "
+            + "\"halflife\" float, "
+            + "\"uncHalflife\" float,"
+            + "\"isStable\" boolean, "
+            + "\"qMinus\" float, "
+            + "\"uncQMinus\" float, "
+            + "\"sn\" float, "
+            + "\"uncSn\" float, "
+            + "\"sp\" float,"
+            + "\"uncSp\" float,"
+            + "\"qAlpha\" float,"
+            + "\"uncQAlpha\" float, "
+            + "\"qPlus\" float, "
+            + "\"uncQPlus\" float, "
+            + "\"qEc\" float, "
+            + "\"uncQEc\" float, "
+            + "\"source\" varchar, "
+            + "PRIMARY KEY(\"nuclideId\")"
+            + ");";
+
+    /**
+     * SQL string to create 'states' table.
+     */
+    public static final String MY_STYLE_CREATE_TABLE_STATES = "create table \"states\" "
+            + "("
+            + "\"nuclideId\" varchar, "
+            + "\"idState\" integer, "
+            + "\"energy\" float, "
+            + "\"uncEnergy\" float, "
+            + "\"spinParity\" varchar, "
+            + "\"halflife\" float, "
+            + "\"uncHalflife\" float, "
+            + "\"isomer\" varchar, "
+            + "\"source\" varchar, "
+            + "PRIMARY KEY(\"nuclideId\", \"idState\")"
+            + ");";
+
+    /**
+     * SQL string to create 'libLines' table.
+     */
+    public static final String MY_STYLE_CREATE_TABLE_LIBLINES = "create table \"libLines\" "
+            + "("
+            + "\"nuclideId\" varchar, "
+            + "\"lineType\" char,"
+            + "\"idLine\" integer,"
+            + "\"daughterNuclideId\" varchar,"
+            + "\"initialIdStateP\" integer,"
+            + "\"initialIdStateD\" integer,"
+            + "\"finalIdState\" integer,"
+            + "\"energy\" float,"
+            + "\"uncEnergy\" float,"
+            + "\"emissionProb\" float,"
+            + "\"uncEmissionProb\" float,"
+            + "\"designation\" varchar,"
+            + "\"source\" varchar, "
+            + "PRIMARY KEY(\"nuclideId\", \"daughterNuclideId\", \"lineType\", \"idLine\")"
+            + ");";
+
+    public static final String PG_STYLE_CREATE_TABLE_DECAY = "create table decay "
             + "("
             + "parent_nuclide_id varchar, "
             + "daughter_nuclide_id varchar, "
@@ -34,7 +113,7 @@ public class PostgresOutputDialect implements OutputDialect {
     /**
      * SQL string to create 'nuclides' table.
      */
-    public static final String CREATE_TABLE_NUCLIDE = "create table nuclide "
+    public static final String PG_STYLE_CREATE_TABLE_NUCLIDE = "create table nuclide "
             + "("
             + "nuclide_id varchar, "
             + "z integer, "
@@ -42,8 +121,7 @@ public class PostgresOutputDialect implements OutputDialect {
             + "isomer varchar, "
             + "half_life float, "
             + "unc_half_life float,"
-            + "is_stable smallint, "
-            + "category varchar, "
+            + "is_stable boolean, "
             + "q_minus float, "
             + "unc_q_minus float, "
             + "sn float, "
@@ -63,7 +141,7 @@ public class PostgresOutputDialect implements OutputDialect {
     /**
      * SQL string to create 'states' table.
      */
-    public static final String CREATE_TABLE_STATE = "create table state "
+    public static final String PG_STYLE_CREATE_TABLE_STATE = "create table state "
             + "("
             + "nuclide_id varchar, "
             + "id_state integer, "
@@ -80,10 +158,10 @@ public class PostgresOutputDialect implements OutputDialect {
     /**
      * SQL string to create 'libLines' table.
      */
-    public static final String CREATE_TABLE_LINE = "create table line "
+    public static final String PG_STYLE_CREATE_TABLE_LINE = "create table line "
             + "("
             + "nuclide_id varchar,"
-            + "line_type varchar,"
+            + "line_type char,"
             + "id_line integer,"
             + "daughter_nuclide_id varchar,"
             + "initial_id_state_p integer,"
@@ -145,12 +223,20 @@ public class PostgresOutputDialect implements OutputDialect {
             "nuclides", "nuclide",
             "states", "state"
     );
-    private static final Map<String, String> createStatements = Map.of(
-            "decay", CREATE_TABLE_DECAY,
-            "line", CREATE_TABLE_LINE,
-            "nuclide", CREATE_TABLE_NUCLIDE,
-            "state", CREATE_TABLE_STATE
+    private static final Map<String, String> pgStyleCreateStatements = Map.of(
+            "decay", PG_STYLE_CREATE_TABLE_DECAY,
+            "line", PG_STYLE_CREATE_TABLE_LINE,
+            "nuclide", PG_STYLE_CREATE_TABLE_NUCLIDE,
+            "state", PG_STYLE_CREATE_TABLE_STATE
     );
+    private static final Map<String, String> myStyleCreateStatements = Map.of(
+            "decays", MY_STYLE_CREATE_TABLE_DECAYS,
+            "libLines", MY_STYLE_CREATE_TABLE_LIBLINES,
+            "nuclides", MY_STYLE_CREATE_TABLE_NUCLIDES,
+            "states", MY_STYLE_CREATE_TABLE_STATES
+    );
+    private static final Set<String> ignoredColumns = Set.of("category");
+    private static final Set<String> booleanColumns = Set.of("is_stable");
     private static final Set<String> suppressDuplicates = Set.of("decay");
     /**
      * Let psql insert rows in batches to speed up data import. Set to zero to disable.
@@ -166,6 +252,7 @@ public class PostgresOutputDialect implements OutputDialect {
 
     private final Map<String, Integer> tableRowCounts = new HashMap<>();
     private Path outputDir;
+    private SchemaStyle schemaStyle = SchemaStyle.MYSQL_STYLE;
 
     private static void addColumnTranslation(String[] keys) {
         if (keys.length < 2)
@@ -182,12 +269,16 @@ public class PostgresOutputDialect implements OutputDialect {
         return outputDir.resolve(tableName + ".sql");
     }
 
+    public Map<String, String> getCreateTableMap() {
+        return schemaStyle == SchemaStyle.MYSQL_STYLE ? myStyleCreateStatements : pgStyleCreateStatements;
+    }
+
     @Override
     public Connection createNuclibDatabase(File f) throws Exception {
         outputDir = Path.of(f.getPath());
         if (!Files.isDirectory(outputDir))
             Files.createDirectory(outputDir);
-        for (var entry : createStatements.entrySet()) {
+        for (var entry : getCreateTableMap().entrySet()) {
             String tableName = entry.getKey();
             String sql = entry.getValue();
             Files.writeString(getTablePath(tableName), sql + "\n", StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -196,37 +287,52 @@ public class PostgresOutputDialect implements OutputDialect {
     }
 
     @Override
-    public void insert(Connection c, String table, String... values) throws Exception {
+    public void insert(Connection c, String inputTableName, String... values) throws Exception {
         if (Main.testRun)
             return;
         ArrayList<String> columns = new ArrayList<>();
-        for (int i = 0; i < values.length; i += 2) {
-            String columnName = values[i].toLowerCase();
-            columns.add(pgColumnNames.getOrDefault(columnName, columnName));
-        }
         ArrayList<String> data = new ArrayList<>();
-        for (int i = 1; i < values.length; i += 2) {
-            String val = values[i];
+        for (int i = 0; i < values.length; i += 2) {
+            String inputColumnName = values[i];
+            String lookupColumnName = values[i].toLowerCase();
+            String val = values[i+1];
+            String pgColumnName = pgColumnNames.getOrDefault(lookupColumnName, inputColumnName);
+            if (ignoredColumns.contains(pgColumnName))
+                continue;
+            switch (schemaStyle) {
+                case MYSQL_STYLE:
+                    columns.add("\"" + inputColumnName + "\"");
+                    break;
+                case POSTGRES_STYLE:
+                    columns.add(pgColumnName);
+                    break;
+            }
             if (val == null || val.equals("NULL") || val.equals("null") || val.equals("NaN")) {
                 data.add("null");
                 continue;
             }
-            try {
-                Double.parseDouble(val);
-                data.add(val);
-            } catch (NumberFormatException e) {
-                data.add("'" + val + "'");
+            if (booleanColumns.contains(pgColumnName)) {
+                data.add(val.matches("1") ? "true"  : "false");
+            }
+            else {
+                try {
+                    Double.parseDouble(val);
+                    data.add(val);
+                } catch (NumberFormatException e) {
+                    data.add("'" + val + "'");
+                }
             }
         }
-        String pgTableName = pgTableNames.getOrDefault(table, table);
-        Path outputFile = getTablePath(pgTableName);
-        Integer rowCount = tableRowCounts.merge(pgTableName, 0, (k, v) -> v + 1);
+        String pgTableName = pgTableNames.getOrDefault(inputTableName, inputTableName);
+        String outputTableName = schemaStyle == SchemaStyle.MYSQL_STYLE ? inputTableName : pgTableName;
+        Path outputFile = getTablePath(outputTableName);
+        Integer rowCount = tableRowCounts.merge(outputTableName, 0, (k, v) -> v + 1);
         if (batchSize > 0) {
             if ((rowCount % batchSize) == 0)
                 Files.writeString(outputFile, "COMMIT; BEGIN;\n", StandardOpenOption.APPEND);
         }
-        Files.writeString(outputFile, String.format("INSERT INTO %s (%s) VALUES (%s)%s;\n",
-                        pgTableName,
+        Files.writeString(outputFile, String.format("INSERT INTO \"%s\" (%s) VALUES (%s)%s;\n",
+                        outputTableName,
                         String.join(",", columns),
                         String.join(",", data),
                         suppressDuplicates.contains(pgTableName) ? " ON CONFLICT DO NOTHING" : ""),
@@ -235,8 +341,8 @@ public class PostgresOutputDialect implements OutputDialect {
 
     @Override
     public void close() throws Exception {
-        for (String pgTableName : tableRowCounts.keySet()) {
-            Path outputFile = getTablePath(pgTableName);
+        for (String tableName : tableRowCounts.keySet()) {
+            Path outputFile = getTablePath(tableName);
             Files.writeString(outputFile, "COMMIT;\n", StandardOpenOption.APPEND);
         }
     }
@@ -244,6 +350,17 @@ public class PostgresOutputDialect implements OutputDialect {
     @Override
     public String getLastSQL() {
         return null;
+    }
+
+    public OutputDialect setSchemaStyle(SchemaStyle schemaStyle) {
+        this.schemaStyle = schemaStyle;
+        return this;
+    }
+
+    public enum SchemaStyle {
+        MYSQL_STYLE,
+        POSTGRES_STYLE,
+        ;
     }
 }
 
