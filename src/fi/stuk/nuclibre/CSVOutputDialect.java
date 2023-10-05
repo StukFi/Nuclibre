@@ -5,9 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CSVOutputDialect implements OutputDialect {
+    private static final Header DECAY = Header.fromText("parentNuclideId daughterNuclideId decayType qValue uncQValue branching uncBranching source");
+    private static final Header LINE = Header.fromText("nuclideId lineType idLine daughterNuclideId initialIdStateP initialIdStateD finalIdState energy uncEnergy emissionProb uncEmissionProb designation source");
+    private static final Header NUCLIDE = Header.fromText("nuclideId isomer halflife uncHalflife isStable qMinus uncQMinus sn uncSn sp uncSp qAlpha uncQAlpha qPlus uncQPlus qEc uncQEc source");
+    private static final Header STATE = Header.fromText("nuclideId idState energy uncEnergy spinParity halflife uncHalflife isomer source");
+    private static final Map<String, Header> TABLES = Map.of(
+            "decays", DECAY,
+            "nuclides", NUCLIDE,
+            "states", STATE,
+            "libLines", LINE
+    );
     private Path outputDir;
     private String lastOutputLine;
 
@@ -21,39 +32,84 @@ public class CSVOutputDialect implements OutputDialect {
         outputDir = Path.of(f.getPath());
         if (!Files.isDirectory(outputDir))
             Files.createDirectory(outputDir);
+        for (var entry : TABLES.entrySet()) {
+            String table = entry.getKey();
+            Header header = entry.getValue();
+            Files.writeString(getOutputFile(table), String.join(",", header.getColumns()) + "\n",
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        }
         return null;
     }
 
-    private void writeLine(Path outputFile, String line) throws Exception {
+    private void appendLine(Path outputFile, String line) throws Exception {
         lastOutputLine = outputFile + ":" + line;
-        Files.writeString(outputFile, line + "\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+        Files.writeString(outputFile, line + "\n", StandardOpenOption.APPEND);
+    }
+
+    private Path getOutputFile(String table) {
+        return outputDir.resolve(table + ".csv");
     }
 
     @Override
     public void insert(Connection c, String table, String... values) throws Exception {
         if (Main.testRun)
             return;
-        ArrayList<String> data = new ArrayList<>();
-        for (int i = 1; i < values.length; i += 2) {
-            String val = values[i];
-            if (val == null || val.equals("NULL") || val.equals("NaN")) {
-                data.add("");
+        Header header = TABLES.get(table);
+        if (header == null)
+            return;
+        String[] data = new String[header.getColumnCount()];
+        for (int i = 0; i < values.length; i += 2) {
+            String column = values[i];
+            String val = values[i + 1];
+            if (val == null || val.equals("NULL") || val.equals("NaN"))
                 continue;
-            }
-            data.add(val);
+            int index = header.getColumnPosition(column);
+            if (index == -1)
+                continue;
+            data[index] = val;
         }
-        Path outputFile = outputDir.resolve(table + ".csv");
-        if (!Files.exists(outputFile) || Files.size(outputFile) == 0) {
-            ArrayList<String> headers = new ArrayList<>();
-            for (int i = 0; i < values.length; i += 2)
-                headers.add(values[i]);
-            writeLine(outputFile, String.join(",", headers));
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] != null)
+                continue;
+            data[i] = "";
         }
-        writeLine(outputFile, String.join(",", data));
+        Path outputFile = getOutputFile(table);
+        appendLine(outputFile, String.join(",", data));
     }
 
     @Override
     public String getLastSQL() {
         return lastOutputLine;
+    }
+
+    private static class Header {
+        private final String[] columns;
+        private final Map<String, Integer> positions = new HashMap<>();
+
+        private Header(String[] columns) {
+            this.columns = columns;
+            for (int i = 0; i < columns.length; i++)
+                positions.put(columns[i].toLowerCase(), i);
+        }
+
+        static Header fromText(String text) {
+            String[] columns = text.split("\\s+");
+            return new Header(columns);
+        }
+
+        public String[] getColumns() {
+            return columns;
+        }
+
+        public int getColumnCount() {
+            return columns.length;
+        }
+
+        public int getColumnPosition(String column) {
+            Integer val = positions.get(column.toLowerCase());
+            if (val == null)
+                return -1;
+            return val;
+        }
     }
 }
