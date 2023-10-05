@@ -89,6 +89,21 @@ Now run the nuclibre application to produce a database called *nuclib.sqlite* fr
 java -jar nuclibre.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlite
 ```
 
+## Quick start with Maven
+
+Download nuclear data as instructed in the previous section.
+
+Build application JAR
+
+    $ mvn package
+    ...
+    [INFO] Building jar: target/nuclibre-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+
+Execute JAR to create ``nuclib.sqlite``
+
+    $ java -jar target/nuclibre-1.0.0-SNAPSHOT-jar-with-dependencies.jar -e ensdf-all-230403.txt -P DDEP -S LARA nuclib.sqlite
+
+
 ## Support for other SQL databases
 
 Postgres and MySQL/MariaDB support has been tested. 
