@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -278,7 +279,7 @@ public class PostgresOutputDialect implements OutputDialect {
         outputDir = Path.of(f.getPath());
         if (!Files.isDirectory(outputDir))
             Files.createDirectory(outputDir);
-        for (var entry : getCreateTableMap().entrySet()) {
+        for (Entry<String, String> entry : getCreateTableMap().entrySet()) {
             String tableName = entry.getKey();
             String sql = entry.getValue();
             Files.writeString(getTablePath(tableName), sql + "\n", StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

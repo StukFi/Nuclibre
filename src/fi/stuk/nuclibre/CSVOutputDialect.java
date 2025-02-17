@@ -7,6 +7,7 @@ import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class CSVOutputDialect implements OutputDialect {
     private static final Header DECAY = Header.fromText("parentNuclideId daughterNuclideId decayType qValue uncQValue branching uncBranching source");
@@ -32,7 +33,7 @@ public class CSVOutputDialect implements OutputDialect {
         outputDir = Path.of(f.getPath());
         if (!Files.isDirectory(outputDir))
             Files.createDirectory(outputDir);
-        for (var entry : TABLES.entrySet()) {
+        for (Entry<String, Header> entry : TABLES.entrySet()) {
             String table = entry.getKey();
             Header header = entry.getValue();
             Files.writeString(getOutputFile(table), String.join(",", header.getColumns()) + "\n",
