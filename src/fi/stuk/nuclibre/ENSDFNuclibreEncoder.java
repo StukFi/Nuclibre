@@ -127,7 +127,10 @@ public class ENSDFNuclibreEncoder {
        String SN = "NULL";
        if(r != null && r.getSN() != null)SN = r.getSN()+"";            
        String uncSN = "NULL";
-       if(r != null && r.getDSN() != null)uncSN = r.getDSN().getValue()+"";       
+       if(r != null && r.getDSN() != null)uncSN = r.getDSN().getValue()+"";
+       if(nuclideId.equals("Co-60")){
+           System.out.println("Here!");
+       }
             //beta+ and EC decay energy
        String qPlus = EncoderUtil.roundToSigDigits(EncoderUtil.getQPlus(NUCID),5,1)+"";
        String uncQPlus = EncoderUtil.roundToSigDigits(EncoderUtil.getQPlusUncertainty(NUCID),5,1)+"";      

@@ -234,7 +234,7 @@ public class EncoderUtil {
         Double m_daughter = PeriodicTable.getMass(daughterNUCID);       
         if(m_daughter == null)return(0);
         Double u_m_daughter = PeriodicTable.getMassUncertainty(daughterNUCID);
-        double QBplusUnc = Math.sqrt(u_m_mother*u_m_mother - u_m_daughter*u_m_daughter) *1e-3*amuToMeV;
+        double QBplusUnc = Math.sqrt(Math.abs(u_m_mother*u_m_mother - u_m_daughter*u_m_daughter)) *1e-3*amuToMeV;
         return(QBplusUnc);
     }
     
@@ -280,7 +280,7 @@ public class EncoderUtil {
         Double m_daughter = PeriodicTable.getMass(daughterNUCID);        
         if(m_daughter == null)return(0);
         Double u_m_daughter = PeriodicTable.getMassUncertainty(daughterNUCID);
-        double QecUnc = Math.sqrt(u_m_mother*u_m_mother - u_m_daughter*u_m_daughter)*1e-3*amuToMeV;      
+        double QecUnc = Math.sqrt(Math.abs(u_m_mother*u_m_mother - u_m_daughter*u_m_daughter))*1e-3*amuToMeV;      
         return(QecUnc);
     }
     
