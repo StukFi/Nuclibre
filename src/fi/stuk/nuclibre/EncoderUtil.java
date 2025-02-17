@@ -88,6 +88,7 @@ public class EncoderUtil {
                 if(hl2.isStable() && !hl.isStable())return(hl);
                 double r = hl.asSeconds() / hl2.asSeconds();                
                 if(r < 1.05 && r > 0.95)return(null);
+                //if( r > 0.955 && r < 1.055 && s < 1)return(null);
                 if(Math.abs(hl.asSeconds() / hl2.asSeconds() - 1) < 0.001d)return(null);
                 return(hl);
             }
@@ -196,8 +197,8 @@ public class EncoderUtil {
      * @throws java.lang.Exception
      */
     public static double getQPlus(String motherNUCID) throws Exception{//, String daughterNUCID){
-        double m_electron = 0.00054858e6;
-        double amuToMeV = 931.494028;        
+        double m_electron =  0.00054858e6; //micro Daltons
+        double amuToMeV = 931.494028;  
         Double m_mother = PeriodicTable.getMass(motherNUCID);
         if(m_mother == null)return(0);
         Integer Z = PeriodicTable.getZ(EncoderUtil.getElementName(motherNUCID));
@@ -206,10 +207,35 @@ public class EncoderUtil {
         String sym = PeriodicTable.getElement(Z-1);
         if(sym == null)return(0);
         String daughterNUCID = A+sym;
-        Double m_daughter = PeriodicTable.getMass(daughterNUCID);                
+        Double m_daughter = PeriodicTable.getMass(daughterNUCID);       
         if(m_daughter == null)return(0);
         double QBplus = (m_mother - m_daughter -2*m_electron)*1e-3*amuToMeV;
         return(QBplus);
+    }
+    
+        /**
+     * Get uncertainty of Q value for beta+ decay.
+     * @param motherNUCID the mother nuclide NUCID (ENSDF)
+     * @return the 1-sigma absolute uncertainty Q value in keV.
+     * @throws java.lang.Exception
+     */
+    public static double getQPlusUncertainty(String motherNUCID) throws Exception{//, String daughterNUCID){
+        //double m_electron =  0.00054858e6;  //negligible uncertainty
+        double amuToMeV = 931.494028;  
+        Double m_mother = PeriodicTable.getMass(motherNUCID);
+        if(m_mother == null)return(0);
+        Double u_m_mother = PeriodicTable.getMassUncertainty(motherNUCID);
+        Integer Z = PeriodicTable.getZ(EncoderUtil.getElementName(motherNUCID));
+        if(Z == null)return(0);
+        int A = EncoderUtil.getIsotope(motherNUCID);
+        String sym = PeriodicTable.getElement(Z-1);
+        if(sym == null)return(0);
+        String daughterNUCID = A+sym;
+        Double m_daughter = PeriodicTable.getMass(daughterNUCID);       
+        if(m_daughter == null)return(0);
+        Double u_m_daughter = PeriodicTable.getMassUncertainty(daughterNUCID);
+        double QBplusUnc = Math.sqrt(u_m_mother*u_m_mother - u_m_daughter*u_m_daughter) *1e-3*amuToMeV;
+        return(QBplusUnc);
     }
     
     /**
@@ -232,6 +258,30 @@ public class EncoderUtil {
         if(m_daughter == null)return(0);
         double Qec = (m_mother - m_daughter)*1e-3*amuToMeV;        
         return(Qec);
+    }
+    
+    /**
+     * Get uncertainty of Q value for EC decay.
+     * @param motherNUCID the mother nuclide NUCID (ENSDF)
+     * @return the 1-sigma absolute uncertainty of Q value in keV.
+     * @throws java.lang.Exception
+     */
+    public static double getQECUncertainty(String motherNUCID) throws Exception{//, String daughterNUCID){        
+        double amuToMeV = 931.494028;
+        Double m_mother = PeriodicTable.getMass(motherNUCID);                
+        if(m_mother == null)return(0);
+        Double u_m_mother = PeriodicTable.getMassUncertainty(motherNUCID);                
+        Integer Z = PeriodicTable.getZ(EncoderUtil.getElementName(motherNUCID));
+        if(Z == null)return(0);
+        int A = EncoderUtil.getIsotope(motherNUCID);
+        String sym = PeriodicTable.getElement(Z-1);
+        if(sym == null)return(0);
+        String daughterNUCID = A+sym;
+        Double m_daughter = PeriodicTable.getMass(daughterNUCID);        
+        if(m_daughter == null)return(0);
+        Double u_m_daughter = PeriodicTable.getMassUncertainty(daughterNUCID);
+        double QecUnc = Math.sqrt(u_m_mother*u_m_mother - u_m_daughter*u_m_daughter)*1e-3*amuToMeV;      
+        return(QecUnc);
     }
     
     /**

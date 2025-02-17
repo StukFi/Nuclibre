@@ -129,11 +129,11 @@ public class ENSDFNuclibreEncoder {
        String uncSN = "NULL";
        if(r != null && r.getDSN() != null)uncSN = r.getDSN().getValue()+"";       
             //beta+ and EC decay energy
-       String qPlus = EncoderUtil.roundToSigDigits(EncoderUtil.getQPlus(NUCID),1,1)+"";
-       String uncQPlus = null;         
+       String qPlus = EncoderUtil.roundToSigDigits(EncoderUtil.getQPlus(NUCID),5,1)+"";
+       String uncQPlus = EncoderUtil.roundToSigDigits(EncoderUtil.getQPlusUncertainty(NUCID),5,1)+"";      
        
-       String qEc = EncoderUtil.roundToSigDigits(EncoderUtil.getQEC(NUCID),1,1)+"";
-       String uncQEc = null;         
+       String qEc = EncoderUtil.roundToSigDigits(EncoderUtil.getQEC(NUCID),5,1)+"";
+       String uncQEc = EncoderUtil.roundToSigDigits(EncoderUtil.getQECUncertainty(NUCID),5,1)+"";
             //Flag indicating this nuclide is stable
        String isStable = hl.isStable() ? "1" : "0";       
        String source = "ENSDF";       
@@ -662,9 +662,12 @@ public class ENSDFNuclibreEncoder {
                 uncQValue = pr.getDQP().getValue()+"";
             }
             
-            String uncBranching = "NULL";
+            String uncBranching = "NULL";           
             if(!nr.getDBR().isUnknown())uncBranching = nr.getDBR().getValue()+"";
             parentNUCID = EncoderUtil.getNuclibNuclideId(parentNUCID);
+            if(parentNUCID.equals("Co-60")){
+                System.out.println("Here");
+            }
             if(isDecayFromIsomer){
                 parentNUCID+=MS;
                 decay.setMS(MS);                
@@ -694,7 +697,9 @@ public class ENSDFNuclibreEncoder {
                 }
             }            
             try{             
-                double br = nr.getBR()-decay.getDaughterMSBraching();                
+                Double brD = nr.getBR();
+                double br = 1-decay.getDaughterMSBraching();                
+                if(brD != null)br = brD-decay.getDaughterMSBraching();            
                 if(br > 0){
                     String branching = br+"";                
                     //For B-, require that the decaying level is known.
