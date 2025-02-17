@@ -14,12 +14,12 @@ javac --version
 
 Get the nuclibre source code by cloning the repository
 ```
-git clone https://gitlab.valtori.fi/stuk-private/nuklididata/nuclibre.git
+git clone https://github.com/StukFi/Nuclibre.git
 ```
 
 Change working directory into the repository
 ```
-cd nuclibre
+cd Nuclibre
 ```
 
 Download the required libraries
